@@ -1,0 +1,32 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: springedu2_security
+
+  # database 연결
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    #url: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+    username: jdbctest
+    password: jdbctest
+
+  #ddl-auto 옵션은 현업에서는 none으로 둠, update,create는 공부할떄만 사용
+  #create : 무조건 새로 만들어줘
+  #update : 있으면 그대로 없으면 새로
+  #none : 아무것도 하지마
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
