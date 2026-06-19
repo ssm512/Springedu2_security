@@ -15,11 +15,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // 서버가 내려주는 csrf 토큰값을 사용하지 않겠다.
+            // visitorForm.html은 순수 html이므로 서버의 csrf 토큰을 보관 처리 불가능하다.
             .csrf(csrf ->csrf.disable()) // 현업에서는 설정(enable), 공부할 때는 설정안함(disable)
             .authorizeHttpRequests(auth->auth
                 .requestMatchers(
                         "/", "/index.html",
-                        "/css/**", "/img/**", "js/**", "/fonts/**",
+                        "/css/**", "/img/**", "/js/**", "/fonts/**",
                         "/login", "/members/register"
                 ).permitAll() // 로그인 없이 사용 가능하다
                 .requestMatchers("/admin/**", "/vupdate", "/vdelete").hasRole("ADMIN")
@@ -30,8 +32,18 @@ public class SecurityConfig {
                 ).authenticated() // 로그인이 필요해
                 .anyRequest().authenticated() // 설정하지 않은 다른 요청도 로그인 필요
             )
-            .formLogin(form->form.loginPage("/login"))
-            .logout(logout->logout.logoutUrl("logout"))
+            // formLogin() 는 사용자가 <form>으로 입력한 username, password를 기반으로 인증 처리
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    // GET 요청으로 /login -> PageController에 /login 주소로 이동 -> login.html로 보낸다는 뜻
+                    // 내가 만든 로그인화면 사용
+                    .loginProcessingUrl("/login") // 이줄은 생략이 가능함
+                    // Post /login 를 의미함
+                    // springsecurity가 username, password를 읽어서 인증처리한다. : 자동
+                    .defaultSuccessUrl("/visitorMain.html", true)
+                    .permitAll()
+            )
+            .logout(logout->logout.logoutUrl("/logout"))
             .exceptionHandling(exception->
                     exception.accessDeniedPage("/access-denied")
             ); // 접근 거부 페이지 처리

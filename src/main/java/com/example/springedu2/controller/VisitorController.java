@@ -83,6 +83,7 @@ public class VisitorController {
     // @ResponseBody : model이 아닌 다른 걸로 return하겠다, message convertor가 숨어있음
     // return 값이 ResponseEntity<Visitor> 일때는 data는 json으로 상태코드로 리턴가능, 내가 error를 만들수 있음(예를 들어 id가 없어요 같은)
     // id를 가지고 조회를 했어, 자료가 있으면 ResponseEntity<Visitor>에 닮고 map의
+    // http://localhost:9090/one?id=1
     @GetMapping(value="/one", produces = "application/json; charset=utf-8")
     @ResponseBody
     public ResponseEntity<Visitor> one (@RequestParam Integer id) {
