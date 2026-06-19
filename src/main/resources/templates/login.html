@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
+    <link rel="stylesheet" href="/css/visitor.css" />
+    <style>
+        .box { width: 420px; margin: 40px auto; padding: 24px; border: 1px solid #ddd; border-radius: 12px; background: #fff; }
+        label { display: block; margin: 12px 0; }
+        input { width: 100%; padding: 10px; box-sizing: border-box; }
+        button { padding: 10px 16px; margin-top: 10px; }
+        .msg { color: #2563eb; }
+        .error { color: #dc2626; }
+        .hint { background: #f3f4f6; padding: 10px; border-radius: 8px; font-size: 14px; }
+    </style>
 </head>
 <body>
     <div class="box">
@@ -11,6 +21,7 @@
         <p class="error" th:if="${param.error}">아이디 또는 비밀번호가 올바르지 않습니다</p>
         <p class="msg" th:if="${param.logout}">로그아웃되었습니다</p>
         <!--<class="msg" th:if="${msg}" >[[${msg}]]</p>-->
+        <!-- post /login은 controller에 있는게 아니고 security 내부의 /login으로 간거임  -->
         <form method="POST" th:action="@{/login}">
             <label>아이디
                 <input type="text" name="username" placeholder="admin" autofocus required>
@@ -24,7 +35,8 @@
         <div class="hint">
             <strong>초기 계정</strong><br>
             관리자: admin / admin1234<br>
-            일반 사용자: user / user1234
+            일반 사용자: user / user1234<br>
+            손님: guest / guest1234
         </div>
         <p>
             <a th:href="@{/members/register}">회원가입</a> |
