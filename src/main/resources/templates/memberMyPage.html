@@ -20,7 +20,7 @@
         <p>권한: <strong th:text="${member.role}"></strong></p>
         <form method="post" th:action="@{/members/me}" th:object="${memberForm}">
             <div class="error" th:if="${#fields.hasGlobalErrors()}"
-                               th:each="err : ${#fields.hasGlobalErrors()}"
+                               th:each="err : ${#fields.globalErrors()}"
                                th:text="${err}"></div>
             <label>이름
                 <input type="text" th:field="*{name}" placeholder="최대 30자" required>

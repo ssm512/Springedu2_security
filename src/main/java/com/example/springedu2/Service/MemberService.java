@@ -25,15 +25,18 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-
+    
+    // UserDetailsService를 implements 받으면 loadUserByUsername을 무조건 만들어야 됨
     // 로그인을 위해서 db에서 회원정보를 조회해서 UserDetails를 생성
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 회원 정보 db에서 회원이름으로 조회
+        // throw는 return과 같이 함수를 정지시키는 역할도 함
         Member  member  =   memberRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다"));
                 // orElseThrow()가 없으면 if로 exception에 대해 코딩을 따로 해줘야 됨
         // 조회한 결과 Member type의 data -> UserDetails type으로 변환
+        // security는 UserDetails가 로그인을 수행하는 객체임
         UserDetails user =  User.builder()
                 .username(member.getUsername())     // 사용자 id
                 .password(member.getPassword())     // 사용자 비밀번호
