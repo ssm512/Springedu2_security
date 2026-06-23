@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 관리</title>
+    <link rel="stylesheet" th:href="@{/css/visitor.css}">
+    <style>
+        .wrap { width: 960px; margin: 30px auto; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #ddd; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        .msg { color: #dc2626; }
+        form { display: inline; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>회원 관리</h1>
+        <p class="msg" th:if="${msg}" th:text="${msg}"></p>
+        <p>
+            <a th:href="@{/admin/members/new}"><button>회원 추가</button></a>
+            <a th:href="@{/visitorMain}"><button>방명록으로</button></a>
+            <a th:href="@{/members/me}"><button>내 정보</button></a>
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>권한</th>
+                    <th>사용</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="member : ${memberList}">
+                    <td th:text="${member.id}"></td>
+                    <td th:text="${member.username}"></td>
+                    <td th:text="${member.name}"></td>
+                    <td th:text="${member.email}"></td>
+                    <td th:text="${member.role}"></td>
+                    <td th:text="${member.enabled ? 'Y' : 'N'}"></td>
+                    <td>
+                        <a th:href="@{/admin/members/{id}/edit(id=${member.id})}"><button>수정</button></a>
+                        <form method="post" th:action="@{/admin/members/{id}/delete(id=${member.id})}" onsubmit="return confirm('삭제하시겠습니까?')">
+                            <button type="submit">삭제</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

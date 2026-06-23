@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>회원추가</title>
     <link rel="stylesheet" href="/css/visitor.css">
     <style>
         .box { width: 420px; margin: 40px auto; padding: 24px; border: 1px solid #ddd; border-radius: 12px; background: #fff; }
@@ -14,8 +14,8 @@
 </head>
 <body>
     <div class="box">
-        <h2>회원가입</h2>
-        <form method="POST" th:action="@{/members/register}" th:object="${memberForm}">
+        <h1>회원추가</h1>
+        <form method="POST" th:action="@{/admin/members}" th:object="${memberForm}">
             <div class="error" th:if="${#fields.hasGlobalErrors()}"
                 th:each="err : ${#fields.globalErrors()}"
                 th:text="${err}"></div>
@@ -36,8 +36,14 @@
                 <input type="email" th:field="*{email}" placeholder="최대 120자" required>
                 <span class="error" th:errors="*{email}"></span>
             </label>
-            <button type="submit">가입</button>
-            <a th:href="@{/login}"><button type="button">로그인으로</button></a>
+            <label>권한
+                <select th:field="*{role}">
+                    <option value="USER">USER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </label>
+            <button type="submit">저장</button>
+            <a th:href="@{/admin/members}"><button type="button">회원 목록</button></a>
         </form>
     </div>
 </body>

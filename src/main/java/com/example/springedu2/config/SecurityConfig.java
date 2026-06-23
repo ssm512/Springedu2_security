@@ -26,7 +26,7 @@ public class SecurityConfig {
                 ).permitAll() // 로그인 없이 사용 가능하다
                 .requestMatchers("/admin/**", "/vupdate", "/vdelete").hasRole("ADMIN")
                 .requestMatchers(
-                        "/visitorMain.html", "/visitorForm.html",
+                        "/visitorMain", "/visitorForm.html",
                         "/vlist", "/vinsert", "/vsearch", "/one",
                         "/members/me"
                 ).authenticated() // 로그인이 필요해
@@ -50,8 +50,8 @@ public class SecurityConfig {
                     // Post /login 를 의미함, 로그인 처리
                     // springsecurity가 username, password를 읽어서 인증처리한다. : 자동
                     // UserDtailsService 안의 loadUserByUsername()를 실행해서 DB 검색 후 로그인 처리까지진행
-                    .defaultSuccessUrl("/visitorMain.html", true)
-                    // 로그인이 성공하면 "/"나 "/visitorMain.html" 로 이동하도록 설정 가능
+                    .defaultSuccessUrl("/visitorMain", true)
+                    // 로그인이 성공하면 "/"나 "/visitorMain" 로 이동하도록 설정 가능
                     // 비밀번호가 틀리거나 사용자가 없으면
                     // '/login?error' 또는 .failureUrl("/login?error")로 이동해서 thymeleaf에서 처리
                     // <p th:if="${param.error}" class="error">

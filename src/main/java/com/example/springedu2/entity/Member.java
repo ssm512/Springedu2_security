@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+//@Entity -> db table
 @Entity
 @Table(name="members")  // table 이름 변경
 @Getter
