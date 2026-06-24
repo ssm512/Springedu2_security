@@ -6,10 +6,22 @@ spring:
     name: springedu2_security
 
   # database 연결
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
     #url: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
+#    username: jdbctest
+#    password: jdbctest
+
+#  datasource:
+#    driver-class-name=oracle: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521:xe
+#    username: spring
+#    password: 1234
+  #
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/edudb
     username: jdbctest
     password: jdbctest
 
@@ -18,7 +30,9 @@ spring:
   #update : 있으면 그대로 없으면 새로
   #none : 아무것도 하지마
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
+    #database-platform: org.hibernate.dialect.MySQLDialect
+    #database-platform: org.hibernate.dialect.OracleDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
