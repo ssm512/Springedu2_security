@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mysql-container:
+    image: shinsangmin512/buildmysql:1.0
+    container_name: mysql-container
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: edudb
+      MYSQL_USER: jdbctest
+      MYSQL_PASSWORD: jdbctest
+      TZ: Asia/Seoul
+    volumes:
+      - springedu2-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "jdbctest", "-pjdbctest"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - springboot-mysql-net
+
+  springedu2-container:
+    image: shinsangmin512/ssmspringedu2:1.0
+    container_name: springedu2-container
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: jdbctest
+      SPRING_DATASOURCE_PASSWORD: jdbctest
+    depends_on:
+      mysql-container:
+        condition: service_healthy
+    networks:
+      - springboot-mysql-net
+
+volumes:
+  springedu2-mysql-data:
+    name: springedu2-mysql-data
+
+networks:
+  springboot-mysql-net:
+    name: springboot-mysql-net
+    driver: bridge

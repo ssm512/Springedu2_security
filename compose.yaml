@@ -1,28 +1,27 @@
 version: '3.8'
 
 services:
-  mysql-container:
-    image: shinsangmin512/buildmysql:1.0
-    container_name: mysql-container
+  postgres-container:
+    image: postgres:17-alpine
+    container_name: postgres-container
     restart: unless-stopped
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: edudb
-      MYSQL_USER: jdbctest
-      MYSQL_PASSWORD: jdbctest
+      POSTGRES_DB: edudb
+      POSTGRES_USER: jdbctest
+      POSTGRES_PASSWORD: jdbctest
       TZ: Asia/Seoul
     volumes:
-      - springedu2-mysql-data:/var/lib/mysql
+      - springedu2-postgres-data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "jdbctest", "-pjdbctest"]
+      test: ["CMD-SHELL", "pg_isready -U jdbctest -d edudb"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 30s
     networks:
-      - springboot-mysql-net
+      - springboot-postgres-net
 
   springedu2-container:
     image: shinsangmin512/ssmspringedu2:1.0
@@ -31,20 +30,21 @@ services:
     ports:
       - "9090:9090"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/edudb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/edudb
       SPRING_DATASOURCE_USERNAME: jdbctest
       SPRING_DATASOURCE_PASSWORD: jdbctest
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
     depends_on:
-      mysql-container:
+      postgres-container:
         condition: service_healthy
     networks:
-      - springboot-mysql-net
+      - springboot-postgres-net
 
 volumes:
-  springedu2-mysql-data:
-    name: springedu2-mysql-data
+  springedu2-postgres-data:
+    name: springedu2-postgres-data
 
 networks:
-  springboot-mysql-net:
-    name: springboot-mysql-net
+  springboot-postgres-net:
+    name: springboot-postgres-net
     driver: bridge
